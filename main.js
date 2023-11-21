@@ -44,6 +44,16 @@ function createPoint(lat, lon) {
 
     return marker;
 }
+function latLonToVector3(lat, lon, radius) {
+    var phi = (90 - lat) * (Math.PI / 180);
+    var theta = (lon + 180) * (Math.PI / 180);
+
+    var x = radius * Math.sin(phi) * Math.cos(theta);
+    var y = radius * Math.cos(phi);
+    var z = radius * Math.sin(phi) * Math.sin(theta);
+
+    return new THREE.Vector3(x, y, z);
+}
 function init() {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(
@@ -57,9 +67,9 @@ function init() {
     loadTexture("../earth.jpg");
     scene.add(sphere);
 
-    var point = createPoint(35.0, -124.0);
-    var point2 = createPoint(0.0, 0.0);
-    var point3 = createPoint(90.0, 0.0);
+    var point = createPoint(35.0, -124.0); // 한국 위치
+    var point2 = createPoint(0.0, 0.0); // 널 아일랜드
+    var point3 = createPoint(90.0, 0.0); // 극좌표
 
     scene.add(point);
     scene.add(point2);
@@ -85,17 +95,6 @@ function loadTexture(texture) {
     const material = new THREE.MeshBasicMaterial({ map: earthTexture });
 
     sphere = new THREE.Mesh(geometry, material);
-}
-
-function latLonToVector3(lat, lon, radius) {
-    var phi = (90 - lat) * (Math.PI / 180);
-    var theta = (lon + 180) * (Math.PI / 180);
-
-    var x = radius * Math.sin(phi) * Math.cos(theta);
-    var y = radius * Math.cos(phi);
-    var z = radius * Math.sin(phi) * Math.sin(theta);
-
-    return new THREE.Vector3(x, y, z);
 }
 
 function animate() {
